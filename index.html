@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>Blackjack</title>
+
+    <meta name="theme-color" content="#101010">
+    <meta name="description" content="Blackjack ve Blackjack Destek uygulaması">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Blackjack">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header class="header">
+            <div class="header-top">
+                <div>
+                    <div class="logo">BLACKJACK</div>
+                    <div class="subtitle">Your personal blackjack table</div>
+                </div>
+
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>READY</span>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-label">OYUN</span>
+                    <strong id="games">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">KAZANMA</span>
+                    <strong id="wins">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">KAYIP</span>
+                    <strong id="losses">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">BERABERE</span>
+                    <strong id="pushes">0</strong>
+                </div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" id="supportTab" onclick="showPage('support')">
+                Blackjack Destek
+            </button>
+
+            <button class="tab" id="gameTab" onclick="showPage('game')">
+                Blackjack
+            </button>
+        </nav>
+
+        <main>
+
+            <!-- BLACKJACK DESTEK -->
+
+            <section id="supportPage" class="page active">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Blackjack Destek</h2>
+                        <p>Kartlarını seç, en doğru hamleyi öğren.</p>
+                    </div>
+
+                    <span class="section-tag">ASSISTANT</span>
+                </div>
+
+                <div class="panel">
+
+                    <h3>Senin Kartların</h3>
+
+                    <div class="card-area">
+                        <div id="playerCards" class="selected-cards">
+                            <span class="empty-card">Henüz kart seçilmedi</span>
+                        </div>
+
+                        <div class="hand-total">
+                            TOPLAM
+                            <strong id="playerTotal">0</strong>
+                        </div>
+                    </div>
+
+                    <h3>Dağıtıcının Kartları</h3>
+
+                    <div class="card-area">
+                        <div id="dealerCards" class="selected-cards">
+                            <span class="empty-card">Henüz kart seçilmedi</span>
+                        </div>
+
+                        <div class="hand-total">
+                            TOPLAM
+                            <strong id="dealerTotal">0</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        <h3>Kart Seç</h3>
+                        <span class="small-label">SELECT CARD</span>
+                    </div>
+
+                    <div class="card-picker" id="cardPicker">
+
+                        <button onclick="selectCard('A')">A</button>
+                        <button onclick="selectCard('2')">2</button>
+                        <button onclick="selectCard('3')">3</button>
+                        <button onclick="selectCard('4')">4</button>
+                        <button onclick="selectCard('5')">5</button>
+                        <button onclick="selectCard('6')">6</button>
+                        <button onclick="selectCard('7')">7</button>
+                        <button onclick="selectCard('8')">8</button>
+                        <button onclick="selectCard('9')">9</button>
+                        <button onclick="selectCard('10')">10</button>
+                        <button onclick="selectCard('J')">J</button>
+                        <button onclick="selectCard('Q')">Q</button>
+                        <button onclick="selectCard('K')">K</button>
+
+                    </div>
+
+                    <div class="button-row">
+                        <button class="secondary-button" onclick="undoCard()">
+                            Geri Al
+                        </button>
+
+                        <button class="secondary-button" onclick="resetSupport()">
+                            Sıfırla
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="panel advice-panel">
+
+                    <div class="panel-title">
+                        <h3>Strateji Önerisi</h3>
+                        <span class="small-label">AI ADVISOR</span>
+                    </div>
+
+                    <div id="advice" class="advice-content">
+                        Kartlarını seçerek başlayabilirsin.
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <h3>Karşılaşma Sonucu</h3>
+
+                    <p class="muted-text">
+                        Karşılaşma bittikten sonra sonucu kaydet.
+                    </p>
+
+                    <div class="button-row">
+                        <button class="win-button" onclick="recordResult('win')">
+                            WIN
+                        </button>
+
+                        <button class="lose-button" onclick="recordResult('lose')">
+                            LOSE
+                        </button>
+
+                        <button class="push-button" onclick="recordResult('push')">
+                            PUSH
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BLACKJACK OYUNU -->
+
+            <section id="gamePage" class="page">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Blackjack</h2>
+                        <p>Dağıtıcıya karşı oyna.</p>
+                    </div>
+
+                    <span class="section-tag">GAME MODE</span>
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        <h3>Oyun Zorluğu</h3>
+                        <span class="small-label">DIFFICULTY</span>
+                    </div>
+
+                    <select id="difficulty">
+                        <option value="easy">Kolay</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Zor</option>
+                    </select>
+
+                    <p class="muted-text">
+                        Zorluk seviyesi yalnızca yeni oyun başlatıldığında uygulanır.
+                    </p>
+
+                </div>
+
+                <div class="game-table">
+
+                    <div class="dealer-area">
+                        <div class="table-label">DEALER</div>
+
+                        <div id="gameDealerCards" class="game-cards">
+                            <span class="empty-card">Oyun başlamadı</span>
+                        </div>
+
+                        <div class="game-total">
+                            <span>TOPLAM</span>
+                            <strong id="gameDealerTotal">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="table-divider"></div>
+
+                    <div class="player-area">
+                        <div class="table-label">YOU</div>
+
+                        <div id="gamePlayerCards" class="game-cards">
+                            <span class="empty-card">Oyun başlamadı</span>
+                        </div>
+
+                        <div class="game-total">
+                            <span>TOPLAM</span>
+                            <strong id="gamePlayerTotal">0</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="gameMessage" class="game-message">
+                    Yeni bir karşılaşma başlat.
+                </div>
+
+                <div class="panel game-controls">
+
+                    <button id="newGameButton" class="primary-button" onclick="startGame()">
+                        Yeni Oyun
+                    </button>
+
+                    <div class="button-row">
+                        <button id="hitButton" class="secondary-button" onclick="hit()" disabled>
+                            HIT
+                        </button>
+
+                        <button id="standButton" class="secondary-button" onclick="stand()" disabled>
+                            STAND
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer>
+            <span>BLACKJACK</span>
+            <span>VERSION 1.0</span>
+        </footer>
+
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
